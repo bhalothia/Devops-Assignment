@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>This job would invoke chef to deploy the latest html file from artifact repo.</description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>5</daysToKeep>
+    <numToKeep>5</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.security.AuthorizationMatrixProperty>
+      <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Delete:devops</permission>
+      <permission>hudson.model.Item.Discover:devops</permission>
+      <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View:devops</permission>
+      <permission>hudson.model.Item.Delete:devops</permission>
+      <permission>hudson.model.Run.Delete:devops</permission>
+      <permission>hudson.model.Run.Update:devops</permission>
+      <permission>hudson.model.Item.Configure:devops</permission>
+      <permission>hudson.model.Item.Cancel:devops</permission>
+      <permission>hudson.scm.SCM.Tag:devops</permission>
+      <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update:devops</permission>
+      <permission>hudson.model.Item.Read:devops</permission>
+      <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Create:devops</permission>
+      <permission>hudson.model.Item.Build:devops</permission>
+      <permission>hudson.model.Item.Workspace:devops</permission>
+      <permission>com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:devops</permission>
+    </hudson.security.AuthorizationMatrixProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <ruby-proxy-object>
+      <ruby-object ruby-class="Jenkins::Tasks::BuilderProxy" pluginid="chef">
+        <object ruby-class="ChefBuilder" pluginid="chef">
+          <chef__json__template pluginid="chef" ruby-class="String"></chef__json__template>
+          <chef__client__config pluginid="chef" ruby-class="String"></chef__client__config>
+          <enabled ruby-class="FalseClass" pluginid="chef"/>
+          <color__output reference="../enabled"/>
+          <ssh__login pluginid="chef" ruby-class="String"></ssh__login>
+          <dry__run reference="../enabled"/>
+          <ssh__host pluginid="chef" ruby-class="String"></ssh__host>
+        </object>
+        <pluginid pluginid="chef" ruby-class="String">chef</pluginid>
+      </ruby-object>
+    </ruby-proxy-object>
+  </builders>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>devops-smoke-test</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+</project>
